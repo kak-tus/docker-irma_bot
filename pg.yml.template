@@ -1,0 +1,41 @@
+---
+pg:
+  connectors:
+    main:
+      host: '
+      {{- if env "IRMA_DB" }}
+        {{- env "IRMA_DB" }}
+      {{- else if service "db" }}
+        {{- range $i, $s := service "db~_agent" }}
+          {{- if eq $i 0 }}{{ $s.Address }}{{ end }}
+        {{- end }}
+      {{- else }}
+        {{- range $dc := datacenters }}
+          {{- range $i, $s := $dc | printf "db@%s" | service }}
+            {{- if eq $i 0 }}{{ $s.Address }}{{ end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}'
+      port: '
+      {{- if env "IRMA_DB_PORT" }}
+        {{- env "IRMA_DB_PORT" }}
+      {{- else if service "db" }}
+        {{- range $i, $s := service "db~_agent" }}
+          {{- if eq $i 0 }}{{ $s.Port }}{{ end }}
+        {{- end }}
+      {{- else }}
+        {{- range $dc := datacenters }}
+          {{- range $i, $s := $dc | printf "db@%s" | service }}
+            {{- if eq $i 0 }}{{ $s.Port }}{{ end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}'
+      user: '{{ with secret "secret/irma/db/user" }}{{ .Data.value }}{{ end }}'
+      password: '{{ with secret "secret/irma/db/password" }}{{ .Data.value }}{{ end }}'
+      dbname: irma
+      dsn: 'dbi:Pg:dbname=${.dbname};host=${.host};port=${.port}'
+      options:
+        PrintWarn: 0
+        PrintError: 0
+        RaiseError: 1
+        pg_enable_utf8: 1
