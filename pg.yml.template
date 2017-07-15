@@ -32,7 +32,7 @@ pg:
       {{- end }}'
       user: '{{ with secret "secret/irma/db/user" }}{{ .Data.value }}{{ end }}'
       password: '{{ with secret "secret/irma/db/password" }}{{ .Data.value }}{{ end }}'
-      dbname: 'xvostov'
+      dbname: irma
       dsn: 'dbi:Pg:dbname=${.dbname};host=${.host};port=${.port}'
       options:
         PrintWarn: 0
