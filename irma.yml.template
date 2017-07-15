@@ -1,10 +1,7 @@
 ---
 irma:
   telegram:
-    api_keys:
-      production: '{{ with secret "secret/irma/telegram/api_keys/production" }}{{ .Data.value }}{{ end }}'
-      development: '{{ with secret "secret/irma/telegram/api_keys/development" }}{{ .Data.value }}{{ end }}'
-    notify_keys:
-      production: '{{ with secret "secret/irma/telegram/notify_keys/production" }}{{ .Data.value }}{{ end }}'
-      development: '{{ with secret "secret/irma/telegram/notify_keys/development" }}{{ .Data.value }}{{ end }}'
+    bot_name: '{{ env "IRMA_BOT_NAME" }}'
+    api_key: '{{ with secret ( env "IRMA_MODE" | printf "secret/irma/telegram/api_keys/%s" ) }}{{ .Data.value }}{{ end }}'
+    notify_key: '{{ with secret ( env "IRMA_MODE" | printf "secret/irma/telegram/notify_keys/%s" ) }}{{ .Data.value }}{{ end }}'
     notify_url: '{{ env "IRMA_NOTIFY_URL" }}'

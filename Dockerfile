@@ -12,13 +12,26 @@ RUN \
     curl \
     git \
     libextutils-makemaker-cpanfile-perl \
-    libpq-dev \
     unzip \
 
   && apt-get install --no-install-recommends --no-install-suggests -y \
     ca-certificates \
+    libanyevent-perl \
+    libclass-xsaccessor-perl \
+    libcpanel-json-xs-perl \
+    libdbd-pg-perl \
+    libev-perl \
+    libhash-merge-perl \
     libio-socket-ssl-perl \
+    libmodule-build-tiny-perl \
+    libmoo-perl \
+    libparams-validate-perl \
     libpq5 \
+    libsql-abstract-perl \
+    libtest-compile-perl \
+    libtext-trim-perl \
+    liburi-perl \
+    libyaml-libyaml-perl \
 
   && cd /usr/local/bin \
   && curl -L https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip -o consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
@@ -26,7 +39,7 @@ RUN \
   && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
   && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
 
-  && cpanm https://github.com/kak-tus/irma_bot.git@0.1 \
+  && cpanm https://github.com/kak-tus/irma_bot.git@0.2 \
 
   && apt-get purge -y --auto-remove \
     build-essential \
@@ -53,6 +66,8 @@ ENV VAULT_ADDR=
 ENV VAULT_TOKEN=
 
 ENV IRMA_NOTIFY_URL=
+ENV IRMA_MODE=development
+ENV IRMA_BOT_NAME=irma_bot
 
 ENV IRMA_DB=
 ENV IRMA_DB_PORT=
