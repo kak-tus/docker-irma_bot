@@ -16,6 +16,6 @@ template {
 }
 
 exec {
-  command = ""
+  command = "hypnotoad -f /usr/local/bin/irma.pl"
   splay = "60s"
 }

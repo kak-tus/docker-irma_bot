@@ -8,14 +8,15 @@ RUN \
 
   && apt-get install --no-install-recommends --no-install-suggests -y \
     build-essential \
-    ca-certificates \
     cpanminus \
     curl \
+    git \
     libextutils-makemaker-cpanfile-perl \
     libpq-dev \
     unzip \
 
   && apt-get install --no-install-recommends --no-install-suggests -y \
+    ca-certificates \
     libio-socket-ssl-perl \
     libpq5 \
 
@@ -23,9 +24,20 @@ RUN \
   && curl -L https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip -o consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
   && echo -n "$CONSUL_TEMPLATE_SHA256  consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" | sha256sum -c - \
   && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
-  && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip
+  && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
 
-  # && cpanm https://github.com/kak-tus/irma_bot.git@0.1
+  && cpanm https://github.com/kak-tus/irma_bot.git@0.1 \
+
+  && apt-get purge -y --auto-remove \
+    build-essential \
+    cpanminus \
+    curl \
+    git \
+    libextutils-makemaker-cpanfile-perl \
+    libpq-dev \
+    unzip \
+
+  && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9000
 

@@ -14,6 +14,9 @@ else
     echo "Container timezone not modified"
 fi
 
+mkdir -p /var/run/irma
+chown www-data /var/run/irma
+
 consul-template -config /etc/service.hcl &
 child=$!
 
