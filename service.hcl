@@ -11,6 +11,11 @@ template {
 }
 
 template {
+  source = "/root/redis.yml.template"
+  destination = "/etc/redis.yml"
+}
+
+template {
   source = "/root/irma.yml.template"
   destination = "/etc/irma/conf.d/irma.yml"
 }

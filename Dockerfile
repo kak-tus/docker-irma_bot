@@ -39,7 +39,7 @@ RUN \
   && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
   && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
 
-  && cpanm https://github.com/kak-tus/irma_bot.git@0.2 \
+  && cpanm https://github.com/kak-tus/irma_bot.git@0.3 \
 
   && apt-get purge -y --auto-remove \
     build-essential \
@@ -72,10 +72,14 @@ ENV IRMA_BOT_NAME=irma_bot
 ENV IRMA_DB=
 ENV IRMA_DB_PORT=
 
+ENV REDIS_ADDR=
+ENV REDIS_PORT=
+
 COPY pg.yml.template /root/pg.yml.template
 COPY sys.yml.template /root/sys.yml.template
 COPY service.hcl /etc/service.hcl
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY irma.yml.template /root/irma.yml.template
+COPY redis.yml.template /root/redis.yml.template
 
 CMD ["/usr/local/bin/entrypoint.sh"]

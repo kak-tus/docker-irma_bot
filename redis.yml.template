@@ -1,0 +1,36 @@
+---
+redis:
+  connectors:
+    local:
+      host: '
+      {{- if env "REDIS_ADDR" }}
+        {{- env "REDIS_ADDR" }}
+      {{- else if service "redis" }}
+        {{- range $i, $s := service "redis~_agent" }}
+          {{- if eq $i 0 }}{{ $s.Address }}{{ end }}
+        {{- end }}
+      {{- else }}
+        {{- range $dc := datacenters }}
+          {{- range $i, $s := $dc | printf "redis@%s" | service }}
+            {{- if eq $i 0 }}{{ $s.Address }}{{ end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}'
+      port: '
+      {{- if env "REDIS_PORT" }}
+        {{- env "REDIS_PORT" }}
+      {{- else if service "redis" }}
+        {{- range $i, $s := service "redis~_agent" }}
+          {{- if eq $i 0 }}{{ $s.Port }}{{ end }}
+        {{- end }}
+      {{- else }}
+        {{- range $dc := datacenters }}
+          {{- range $i, $s := $dc | printf "redis@%s" | service }}
+            {{- if eq $i 0 }}{{ $s.Port }}{{ end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}'
+      password: '{{ with secret "secret/irma/redis/password" }}{{ .Data.value }}{{ end }}'
+      handle_params:
+        autocork: 1
+      read_timeout: 300
