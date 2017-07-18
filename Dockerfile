@@ -39,7 +39,7 @@ RUN \
   && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
   && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
 
-  && cpanm https://github.com/kak-tus/irma_bot.git@0.3 \
+  && cpanm https://github.com/kak-tus/irma_bot.git@0.4 \
 
   && apt-get purge -y --auto-remove \
     build-essential \
