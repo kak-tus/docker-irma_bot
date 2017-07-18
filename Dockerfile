@@ -29,6 +29,8 @@ RUN \
     libpq5 \
     libsql-abstract-perl \
     libtest-compile-perl \
+    libtest-fatal-perl \
+    libtest-tcp-perl \
     libtext-trim-perl \
     liburi-perl \
     libyaml-libyaml-perl \
