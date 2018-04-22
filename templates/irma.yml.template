@@ -5,3 +5,8 @@ irma:
     api_key: '{{ with secret ( env "IRMA_MODE" | printf "secret/irma/telegram/api_keys/%s" ) }}{{ .Data.value }}{{ end }}'
     notify_key: '{{ with secret ( env "IRMA_MODE" | printf "secret/irma/telegram/notify_keys/%s" ) }}{{ .Data.value }}{{ end }}'
     notify_url: '{{ env "IRMA_NOTIFY_URL" }}'
+    proxy:
+      enable: {{ if keyExists "config/proxy/enable" }}
+        {{- if eq ( key "config/proxy/enable" ) "true" }}1{{ else }}0{{ end }}
+        {{- else }}0{{ end }}
+      address: '{{ with secret "secret/proxy/address" }}{{ .Data.value }}{{ end }}'

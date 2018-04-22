@@ -1,22 +1,22 @@
 max_stale = "2m"
 
 template {
-  source = "/root/pg.yml.template"
+  source = "/root/templates/pg.yml.template"
   destination = "/etc/pg.yml"
 }
 
 template {
-  source = "/root/sys.yml.template"
+  source = "/root/templates/sys.yml.template"
   destination = "/etc/sys.yml"
 }
 
 template {
-  source = "/root/redis.yml.template"
+  source = "/root/templates/redis.yml.template"
   destination = "/etc/redis.yml"
 }
 
 template {
-  source = "/root/irma.yml.template"
+  source = "/root/templates/irma.yml.template"
   destination = "/etc/irma/conf.d/irma.yml"
 }
 

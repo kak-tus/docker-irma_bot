@@ -17,8 +17,10 @@ fi
 mkdir -p /var/run/irma
 chown www-data /var/run/irma
 
-consul-template -config /etc/service.hcl &
+consul-template -config /root/templates/service.hcl &
 child=$!
 
-trap "kill $child" INT TERM
+trap "kill -s INT $child" INT TERM
+wait "$child"
+trap - INT TERM
 wait "$child"
