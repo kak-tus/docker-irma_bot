@@ -1,9 +1,34 @@
-FROM debian:9
+FROM debian:9 AS build
 
 ENV \
   CONSUL_TEMPLATE_VERSION=0.19.4 \
   CONSUL_TEMPLATE_SHA256=5f70a7fb626ea8c332487c491924e0a2d594637de709e5b430ecffc83088abc0 \
   \
+  RTTFIX_VERSION=0.1 \
+  RTTFIX_SHA256=349b309c8b4ba0afe3acf7a0b0173f9e68fffc0f93bad4b3087735bd094dea0d
+
+RUN \
+  apt-get update \
+  \
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+    ca-certificates \
+    curl \
+    unzip \
+  \
+  && cd /usr/local/bin \
+  && curl -L https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip -o consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
+  && echo -n "$CONSUL_TEMPLATE_SHA256  consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" | sha256sum -c - \
+  && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
+  && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
+  \
+  && cd /usr/local/bin \
+  && curl -L https://github.com/kak-tus/rttfix/releases/download/$RTTFIX_VERSION/rttfix -o rttfix \
+  && echo -n "$RTTFIX_SHA256  rttfix" | sha256sum -c - \
+  && chmod +x rttfix
+
+FROM debian:9
+
+ENV \
   SET_CONTAINER_TIMEZONE=true \
   CONTAINER_TIMEZONE=Europe/Moscow \
   \
@@ -56,12 +81,6 @@ RUN \
     liburi-perl \
     libyaml-libyaml-perl \
   \
-  && cd /usr/local/bin \
-  && curl -L https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip -o consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
-  && echo -n "$CONSUL_TEMPLATE_SHA256  consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip" | sha256sum -c - \
-  && unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
-  && rm consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
-  \
   ## Latest YAML::XS needs to latest JSON::Validator
   && cpanm YAML::XS \
   \
@@ -80,6 +99,8 @@ RUN \
 
 EXPOSE 9000
 
+COPY --from=build /usr/local/bin/rttfix /usr/local/bin/rttfix
+COPY --from=build /usr/local/bin/consul-template /usr/local/bin/consul-template
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY templates /root/templates
 
