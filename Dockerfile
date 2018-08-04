@@ -84,7 +84,7 @@ RUN \
   ## Latest YAML::XS needs to latest JSON::Validator
   && cpanm YAML::XS \
   \
-  && cpanm https://github.com/kak-tus/irma_bot.git@0.19 \
+  && cpanm https://github.com/kak-tus/irma_bot.git@0.20 \
   \
   && apt-get purge -y --auto-remove \
     build-essential \
