@@ -1,4 +1,4 @@
-FROM debian:9 AS build
+FROM debian:9.8-slim AS build
 
 ENV \
   CONSUL_TEMPLATE_VERSION=0.19.4 \
@@ -26,7 +26,7 @@ RUN \
   && echo -n "$RTTFIX_SHA256  rttfix" | sha256sum -c - \
   && chmod +x rttfix
 
-FROM debian:9
+FROM debian:9.8-slim
 
 ENV \
   SET_CONTAINER_TIMEZONE=true \
